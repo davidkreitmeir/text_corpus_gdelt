@@ -12,17 +12,18 @@ from multiprocessing import Pool, cpu_count
 work_dir = os.path.dirname(os.path.realpath(__file__)) #This should return the directory path of this scipt 
 os.chdir(work_dir)
 
-df = pd.read_csv("/Users/david/Dropbox/NER/Training_Dataset/GDELT/url_GDELT.csv")
+# Load in GDELT csv file: requiremnt for analysis below: csv file must contain globaleventid & sourceurl 
+df = pd.read_csv("url_GDELT.csv")
 
 # check for duplicates in globaleventid
 print(df.duplicated('globaleventid').sum())
 
-def df_cleaner(df):
+def gdelt_cleaner(df):
     """
     This function takes a GDELT dataframe (df) and returns the "cleaned" dataframe with:
-    1.) only http(s) sourceurl observations
-    2.) add ID in front of all "globaleventid"s
-    3.) and the columns globaleventid & sourceurl
+    1.) columns globaleventid & sourceurl
+    2.) only http(s) sourceurl observations
+    3.) ID in front of all "globaleventid"s
     """
     # 1.) clean from observations without http(s) urls
     df['ind'] = df['sourceurl'].str.contains('^http.*', regex=True)
